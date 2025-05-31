@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { getUser } from '../utils/api';
 import { type User, userAtom } from '../store/store';
@@ -30,7 +29,7 @@ export const Dashboard = () => {
         } else {
           toast.error('Failed to fetch user data', {
             duration: 3000,
-            style: { background: '#fef2f2', color: '#b91c1c' },
+            style: { background: '#FFFFFF', color: '#000000', border: '1px solid #000000' },
           });
           navigate('/signin');
         }
@@ -38,7 +37,7 @@ export const Dashboard = () => {
         console.error(err);
         toast.error('Error fetching user data', {
           duration: 3000,
-          style: { background: '#fef2f2', color: '#b91c1c' },
+          style: { background: '#FFFFFF', color: '#000000', border: '1px solid #000000' },
         });
         navigate('/signin');
       } finally {
@@ -57,7 +56,6 @@ export const Dashboard = () => {
           console.log('Ack:', data);
         } else if (data.type === 'history') {
           const { messages: historyMessages, withUser } = data;
-          // Sort history messages chronologically (oldest first)
           const sortedHistory = historyMessages.sort(
             (a: Message, b: Message) =>
               new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
@@ -88,7 +86,7 @@ export const Dashboard = () => {
     } else {
       toast.error('No authentication token found', {
         duration: 3000,
-        style: { background: '#fef2f2', color: '#b91c1c' },
+        style: { background: '#FFFFFF', color: '#000000', border: '1px solid #000000' },
       });
       navigate('/signin');
     }
@@ -105,7 +103,7 @@ export const Dashboard = () => {
   const handleSendMessage = (message: Message) => {
     setMessages((prev) => {
       if (message.to === selectedUser && message.from === user?.email) {
-        return [...prev, message]; // Append without reversing
+        return [...prev, message];
       }
       return prev;
     });
@@ -118,58 +116,45 @@ export const Dashboard = () => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gray-50 flex flex-col"
-    >
+    <div className="min-h-screen bg-white">
       <Navbar />
+      
       {isLoading ? (
-        <div className="container flex flex-col items-center justify-center flex-grow">
-          <motion.div
-            className="flex items-center gap-2 text-gray-600"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-          >
-            <svg className="h-6 w-6" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              />
-            </svg>
-            Loading...
-          </motion.div>
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-sm text-black font-light tracking-wide">Loading</p>
+          </div>
         </div>
       ) : (
-        <main className="container flex flex-col lg:flex-row flex-grow py-4 md:py-8 px-4 md:px-6">
-          <div className="w-full lg:w-1/3 lg:pr-4 mb-4 lg:mb-0">
-            <UserSearch
-              onSelectUser={setSelectedUser}
-              currentUserEmail={user?.email || null}
-              allMessages={allMessages}
-            />
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-12rem)]">
+            {/* User Search Panel */}
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-none">
+              <div className="h-full">
+                <UserSearch
+                  onSelectUser={setSelectedUser}
+                  currentUserEmail={user?.email || null}
+                  allMessages={allMessages}
+                />
+              </div>
+            </div>
+
+            {/* Chat Window */}
+            <div className="lg:col-span-2 bg-white border border-gray-200 rounded-none">
+              <div className="h-full">
+                <ChatWindow
+                  selectedUser={selectedUser}
+                  messages={messages}
+                  onlineUsers={onlineUsers}
+                  currentUserEmail={user?.email || null}
+                  onSendMessage={handleSendMessage}
+                />
+              </div>
+            </div>
           </div>
-          <div className="w-full lg:w-2/3">
-            <ChatWindow
-              selectedUser={selectedUser}
-              messages={messages}
-              onlineUsers={onlineUsers}
-              currentUserEmail={user?.email || null}
-              onSendMessage={handleSendMessage}
-            />
-          </div>
-        </main>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
