@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f7f7;
+  color: #1a1a1a;
+}
+
+.container {
+  @apply max-w-4xl mx-auto px-4;
+}
+
+.btn {
+  @apply px-6 py-2 rounded-lg font-medium transition-all duration-300;
+}
+
+.btn-primary {
+  @apply bg-black text-white hover:bg-gray-800;
+}
+
+.input {
+  @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black;
+}
+
+/* Custom Scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f3f4f6;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
