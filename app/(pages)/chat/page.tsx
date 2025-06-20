@@ -199,9 +199,27 @@ export default function Chat() {
               </div>
             </div>
           </div>
-    
-          
- 
+       <div className="hidden items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-white to-zinc-300 rounded-full flex items-center justify-center">
+              <span className="text-sm font-bold text-black">{name.charAt(0).toUpperCase()}</span>
+            </div>
+            <div>
+              <span className="text-sm text-zinc-300">
+                Connected as <span className="font-semibold text-white">{name}</span>
+              </span>
+              <div className="flex items-center space-x-2 mt-0.5">
+                <div className="flex items-center space-x-1">
+                  <Shield className="w-3 h-3 text-zinc-500" />
+                  <span className="text-xs text-zinc-500">Ephemeral</span>
+                </div>
+                <span className="text-xs text-zinc-600">•</span>
+                <div className="flex items-center space-x-1">
+                  <Globe className="w-3 h-3 text-zinc-500" />
+                  <span className="text-xs text-zinc-500">Global</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -346,49 +364,50 @@ export default function Chat() {
         </div>
       )}
 
- {/* Input Area */}
-<div className="relative z-10 bg-zinc-900 border-t border-zinc-800 p-4 sm:p-6">
-  <div className="flex items-end gap-2 sm:gap-4">
-    <div className="flex-1 relative">
-      <div className="bg-zinc-800 rounded-2xl sm:rounded-3xl border border-zinc-700 focus-within:border-zinc-600 focus-within:shadow-lg focus-within:shadow-zinc-900/50 transition-all duration-200">
-        <div className="flex items-center">
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value.slice(0, maxLength))}
-            onKeyPress={handleKeyPress}
-            className="flex-1 bg-transparent text-white placeholder-zinc-500 px-4 py-3 sm:px-6 sm:py-4 focus:outline-none text-base sm:text-lg w-full"
-            placeholder="Send a message..."
-            disabled={connectionStatus !== 'Connected'}
-          />
+      {/* Input Area */}
+      <div className="relative z-10 bg-zinc-900 border-t border-zinc-800 p-6">
+        <div className="flex items-end space-x-4">
+          <div className="flex-1 relative">
+            <div className="bg-zinc-800 rounded-3xl border border-zinc-700 focus-within:border-zinc-600 focus-within:shadow-lg focus-within:shadow-zinc-900/50 transition-all duration-200">
+              <div className="flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, maxLength))}
+                  onKeyPress={handleKeyPress}
+                  className="flex-1 bg-transparent text-white placeholder-zinc-500 px-6 py-4 focus:outline-none text-lg"
+                  placeholder="Send a message into the void..."
+                  disabled={connectionStatus !== 'Connected'}
+                />
+       
+              </div>
+            </div>
+            <div className="flex justify-between items-center mt-2 px-2">
+              <span className="text-xs text-zinc-600">
+                {connectionStatus !== 'Connected' && (
+                  <span className="text-red-400">Reconnecting...</span>
+                )}
+              </span>
+              <span className={`text-xs font-mono ${input.length > maxLength * 0.9 ? 'text-red-400' : 'text-zinc-500'}`}>
+                {input.length}/{maxLength}
+              </span>
+            </div>
+          </div>
+          
+          <button
+            onClick={sendMessage}
+            disabled={!input.trim() || connectionStatus !== 'Connected' || input.length > maxLength}
+            className={`-mt-10 w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 ${
+              input.trim() && connectionStatus === 'Connected' && input.length <= maxLength
+                ? 'bg-white text-black hover:bg-zinc-200 shadow-lg hover:shadow-xl transform hover:scale-105 hover:shadow-white/20' 
+                : 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
+            }`}
+          >
+            <Send className="w-6 h-6" />
+          </button>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-1 px-1 sm:px-2">
-        <span className="text-[0.65rem] sm:text-xs text-zinc-600">
-          {connectionStatus !== 'Connected' && (
-            <span className="text-red-400">Reconnecting...</span>
-          )}
-        </span>
-        <span className={`text-[0.65rem] sm:text-xs font-mono ${input.length > maxLength * 0.9 ? 'text-red-400' : 'text-zinc-500'}`}>
-          {input.length}/{maxLength}
-        </span>
-      </div>
-    </div>
-    
-<button
-  onClick={sendMessage}
-  disabled={!input.trim() || connectionStatus !== 'Connected' || input.length > maxLength}
-  className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center transition-all duration-200 touch-none -mt-1 sm:-mt-2 ${
-    input.trim() && connectionStatus === 'Connected' && input.length <= maxLength
-      ? 'bg-white text-black hover:bg-zinc-200 shadow-lg hover:shadow-xl transform hover:scale-105 hover:shadow-white/20 active:scale-95'
-      : 'bg-zinc-700 text-zinc-500 cursor-not-allowed'
-  }`}
->
-  <Send className="w-5 h-5 sm:w-6 sm:h-6" />
-</button>
-  </div>
-</div>
 
       <style jsx>{`
         @keyframes fadeInUp {
