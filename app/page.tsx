@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useState, useEffect } from 'react';
 import { MessageCircle, Zap, Shield, Globe, ArrowRight, Play, Pause } from 'lucide-react';
-import { Footer } from '@/app/components/Footer';
+import { Footer } from '@/components/Footer';
 
 export default function Home() {
   const [typedText, setTypedText] = useState('');
