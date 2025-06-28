@@ -1,6 +1,5 @@
 # Repository Documentation
 
-
 ## Repository Architecture
 
 ```mermaid
